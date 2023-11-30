@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -14,15 +15,18 @@ var Logger = zerolog.New(os.Stdout).With().Logger()
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		rand.Seed(time.Now().UnixNano())
-		random := rand.Intn(10) + 1
+		random := rand.Intn(5) + 1
 		duration := time.Duration(random) * time.Second
-		if duration == 5 {
-			Logger.Error().Msg("BOOM!")
-			panic("BOOM!")
-		}
 		time.Sleep(duration)
+
 		queryParams := r.URL.Query()
 		clientId := queryParams.Get("clientId")
+		id, _ := strconv.Atoi(clientId)
+		if id == 5 {
+			http.Error(w, "request has failed for clientId "+clientId, http.StatusInternalServerError)
+			return
+		}
+
 		fmt.Fprintf(w, "SERVER GOT clientId %v - DONE PROCESSING AFTER %v \n", clientId, duration)
 	})
 

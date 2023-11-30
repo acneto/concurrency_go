@@ -21,11 +21,11 @@ type reply struct {
 
 func main() {
 	var wg sync.WaitGroup
-	ch := make(chan reply, 100)
+	ch := make(chan reply, 5)
 	// set timeout accordingly
 	client := http.Client{Timeout: 60 * time.Second}
 
-	for id := 0; id < 100; id++ {
+	for id := 0; id < 10; id++ {
 		wg.Add(1)
 		go send(id, &wg, ch, client)
 	}
@@ -36,7 +36,7 @@ func main() {
 	}()
 
 	for result := range ch {
-		fmt.Println(result.success)
+		fmt.Println(result)
 	}
 }
 
