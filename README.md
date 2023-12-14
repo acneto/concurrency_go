@@ -2,7 +2,7 @@
 
 - It shows how a client can launch several Goroutines to a server and wait for the result using channels.
 - We can set a timeout on client side to handle slow requests on the server side.
-- The server might send an HTTP 500 anytime..
+- The server might send an HTTP 500 anytime.
 
 Example:
 
